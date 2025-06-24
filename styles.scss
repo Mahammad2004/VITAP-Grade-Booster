@@ -21,8 +21,8 @@ body {
 }
 
 h1 {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: bold;
+    font-family: cursive;
+    font-weight: bolder;
     letter-spacing: 1px;
     text-shadow: 2px 2px 3px $qclr;
 }
@@ -249,7 +249,7 @@ select:focus {
     }
 
     .custom-scrollbar {
-        max-height: 69vh !important;
+        max-height: 70vh !important;
     }
 
     .needs-validation {
