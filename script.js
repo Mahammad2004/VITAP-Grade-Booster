@@ -227,18 +227,24 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const requiredGrade = getInputValue('requiredGradeCutoff');
     const requiredRoundedThreshold = requiredGrade - 0.99;
-    const roundedFinal = Math.round(finalWeightage);
+    const roundedFinal = Math.ceil(finalWeightage);
 
     let fatGainNeeded = 'No extra FAT marks needed';
     let additionalFatMarks = 0;
 
     if (requiredGrade > 0 && finalWeightage < requiredRoundedThreshold) {
       const neededBoost = requiredRoundedThreshold - finalWeightage;
-      const fatMarkImpact = (40 / 100) * 0.75; // 0.3 per FAT mark
+
+      let fatMarkImpact = 0;
+      if (courseType === 'theory') {
+        fatMarkImpact = 40 / 100; // 0.4 per FAT mark
+      } else {
+        fatMarkImpact = (40 / 100) * 0.75; // 0.3 per FAT mark
+      }
+
       additionalFatMarks = (neededBoost / fatMarkImpact).toFixed(2);
       fatGainNeeded = `<span class="badge bg-warning text-dark">${additionalFatMarks}</span>`;
     }
-
     // Warnings
     let warningMessages = '';
     let hasCriticalError = false;
@@ -312,8 +318,6 @@ window.addEventListener('DOMContentLoaded', () => {
     calculateMarks();
   });
 });
-
-
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('service-worker.js');
