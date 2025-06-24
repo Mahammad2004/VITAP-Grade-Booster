@@ -266,7 +266,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Render results table
     outputDiv.innerHTML = `
-      <table class="table table-responsive table-bordered">
+    <div class="table-responsive">
+      <table class="table table-bordered">
         <thead>
           <tr>
             <th>Total Weightage (Actual)</th>
@@ -284,6 +285,7 @@ window.addEventListener('DOMContentLoaded', () => {
           </tr>
         </tbody>
       </table>
+      </div>
     `;
 
     // Append any non-blocking warnings (e.g., missing cutoff)
