@@ -266,7 +266,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Render results table
     outputDiv.innerHTML = `
-      <table class="table table-bordered">
+      <table class="table table-responsive table-bordered">
         <thead>
           <tr>
             <th>Total Weightage (Actual)</th>

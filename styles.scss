@@ -215,8 +215,17 @@ select:focus {
         font-size: 16px !important;
     }
 
+    .form-check-input {
+        border: 2px solid $tclr !important;
+        transform: scale(1);
+    }
+
+    .form-check-label:hover {
+        font-size: 14px;
+    }
+
     .custom-scrollbar {
-        max-height: 68vh !important;
+        max-height: 66vh !important;
     }
 
     .nav-link {
