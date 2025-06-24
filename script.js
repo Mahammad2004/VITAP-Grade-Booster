@@ -111,36 +111,46 @@ window.addEventListener('DOMContentLoaded', () => {
   addComponentBtn.addEventListener('click', () => {
     componentCount++;
     const componentDiv = document.createElement('div');
-    componentDiv.className = 'mb-2 p-2';
+    componentDiv.className = 'mb-2 p-2 position-relative';
 
     componentDiv.innerHTML = `
-      <h5 class="mb-3 text-info">Component ${componentCount}</h5>
-      <div class="row g-3">
-        <div class="col-md-4">
-          <div class="form-floating">
-            <input type="number" class="form-control" id="obtained-${componentCount}" min="0" step="any" placeholder="Obtained Marks" required>
-            <label for="obtained-${componentCount}">Obtained Marks</label>
-            <div class="invalid-feedback">Please enter valid marks.</div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-floating">
-            <input type="number" class="form-control" id="total-${componentCount}" min="0" step="any" placeholder="Total Marks" required>
-            <label for="total-${componentCount}">Total Marks</label>
-            <div class="invalid-feedback">Please enter valid marks.</div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-floating">
-            <input type="number" class="form-control" id="weight-${componentCount}" min="0" max="100" step="any" placeholder="Weightage %" required>
-            <label for="weight-${componentCount}">Weightage %</label>
-            <div class="invalid-feedback">Please enter valid max weightage.</div>
-          </div>
+    <!-- Remove button -->
+    <span class="remove-component position-absolute top-0 end-0 mx-3 fs-1 text-danger" role="button" title="Remove Component">&times;</span>
+
+    <h5 class="mb-3 text-info">Component ${componentCount}</h5>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="form-floating">
+          <input type="number" class="form-control" id="obtained-${componentCount}" min="0" step="any" placeholder="Obtained Marks" required>
+          <label for="obtained-${componentCount}">Obtained Marks</label>
+          <div class="invalid-feedback">Please enter valid marks.</div>
         </div>
       </div>
-    `;
+      <div class="col-md-4">
+        <div class="form-floating">
+          <input type="number" class="form-control" id="total-${componentCount}" min="0" step="any" placeholder="Total Marks" required>
+          <label for="total-${componentCount}">Total Marks</label>
+          <div class="invalid-feedback">Please enter valid marks.</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-floating">
+          <input type="number" class="form-control" id="weight-${componentCount}" min="0" max="100" step="any" placeholder="Weightage %" required>
+          <label for="weight-${componentCount}">Weightage %</label>
+          <div class="invalid-feedback">Please enter valid max weightage.</div>
+        </div>
+      </div>
+    </div>
+  `;
 
+    // Add the component to the container
     internalComponentsDiv.appendChild(componentDiv);
+
+    // Add remove functionality to this component
+    const removeBtn = componentDiv.querySelector('.remove-component');
+    removeBtn.addEventListener('click', () => {
+      componentDiv.remove();
+    });
   });
 
   // Utility function to get parsed input value
@@ -226,7 +236,7 @@ window.addEventListener('DOMContentLoaded', () => {
       const neededBoost = requiredRoundedThreshold - finalWeightage;
       const fatMarkImpact = (40 / 100) * 0.75; // 0.3 per FAT mark
       additionalFatMarks = (neededBoost / fatMarkImpact).toFixed(2);
-      fatGainNeeded = `<span class="badge bg-warning text-dark">${additionalFatMarks}</span> more FAT marks required`;
+      fatGainNeeded = `<span class="badge bg-warning text-dark">${additionalFatMarks}</span>`;
     }
 
     // Warnings
@@ -264,29 +274,33 @@ window.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    if (additionalFatMarks) {
+      var successMessage = `<p class="text-info"><strong>" ${additionalFatMarks} "</strong> more marks needed.</p>`;
+    }
     // Render results table
     outputDiv.innerHTML = `
-    <div class="table-responsive">
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Total Weightage (Actual)</th>
-            <th>Rounded Weightage</th>
-            <th>Required Grade Cutoff</th>
-            <th>Extra FAT Marks Needed</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>${finalWeightage.toFixed(2)}%</td>
-            <td>${roundedFinal}%</td>
-            <td>${requiredGrade ? requiredGrade + '%' : '—'}</td>
-            <td class="table-warning">${fatGainNeeded}</td>
-          </tr>
-        </tbody>
-      </table>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Total Weightage (Actual)</th>
+                <th>Rounded Weightage</th>
+                <th>Required Grade Cutoff</th>
+                <th>Extra FAT Marks Needed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>${finalWeightage.toFixed(2)}%</td>
+                <td>${roundedFinal}%</td>
+                <td>${requiredGrade ? requiredGrade + '%' : '—'}</td>
+                <td class="table-warning">${fatGainNeeded}</td>
+              </tr>
+            </tbody>
+          </table>
       </div>
-    `;
+    ${additionalFatMarks ? successMessage : ""}
+  `;
 
     // Append any non-blocking warnings (e.g., missing cutoff)
     outputDiv.innerHTML += warningMessages;
